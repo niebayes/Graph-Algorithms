@@ -5,7 +5,6 @@
 #include <queue>
 #include <unordered_set>
 
-#include "def.h"
 #include "graph.hpp"
 
 // Prim minimum spanning tree algorithm.
@@ -52,7 +51,6 @@ Graph prim_min_span_tree(const Graph& g) {
       mst.add_edge(e);
       mst.add_edge(e.reversed());
       visited.insert(e.w);
-      total_cost += e.weight;
       // push new edges into the queue.
       for (const Edge& ne : g.edges(e.w)) {
         pq.push(ne);

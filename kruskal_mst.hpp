@@ -1,7 +1,6 @@
 #ifndef KRUSKAL_MST_HPP_
 #define KRUSKAL_MST_HPP_
 
-#include "def.h"
 #include "graph.hpp"
 #include "union_find.hpp"
 
@@ -34,7 +33,6 @@ Graph kruskal_min_span_tree(const Graph& g) {
       mst.add_edge(e);
       mst.add_edge(e.reversed());
       uf.union_vertices(e.v, e.w);
-      total_cost += e.weight;
     }
   }
 
@@ -62,8 +60,6 @@ Graph kruskal_max_span_tree(const Graph& g) {
       mst.add_edge(e);
       mst.add_edge(e.reversed());
       uf.union_vertices(e.v, e.w);
-    } else {
-      total_cost += e.weight;
     }
   }
 
