@@ -9,9 +9,7 @@
 
 ### Cycle Detection for Directed Graph
 - DFS to detect back edge
-- Union-Find to iterate all edges
-  - limits compared to DFS: cannot print the cycle
-  - but easier to implement
+- Topological Sorting (Kahn) to check if #visited vertices == #vertices.
 
 ### Cycle Detection for Undirected Graph
 - DFS to detect back edge 
@@ -20,6 +18,7 @@
   - compared to Union-Find in directed graph: remove duplicated edges
   - limits compared to DFS: cannot print the cycle
   - but easier to implement
+  - note, cannot use Union-Find to detect cycle in directed graph
 
 ### Connected Components of Undirected Graph (CC)
 - DFS

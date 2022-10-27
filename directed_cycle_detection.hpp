@@ -1,22 +1,23 @@
+#ifndef DIRECTED_CYCLE_DETECTION_HPP_
+#define DIRECTED_CYCLE_DETECTION_HPP_
+
 #include <cassert>
+#include <iostream>
 #include <stack>
 #include <unordered_map>
-#include <unordered_set>
+#include <vector>
 
 #include "graph.hpp"
 #include "union_find.hpp"
 
-#define TEST 1
+// algorithms for detecting a cycle in a directed graph, i.e. check if the given
+// graph is an directed acyclic graph (DAG).
 
-// algorithms to detect a cycle in a undirected graph.
-
-// dfs to detect back edge.
-// almost identical to dfs detecting back edge in a directed graph,
-// except you have to identify the case that the outgoing vertex is parent
-// vertex, i.e. to not consider the bidirectional edges.
-// to identify sucha a case, you need to maintain a parent mapping during DFS
-// traversal. (recommended)
-// another solution is to remove duplicated edges at first.
+// DFS to detect back edge, i.e. an edge points to an ancestor vertex which is
+// not the parent.
+// assume the current vertex is v and the ancenstor vertex is w.
+// such a back edge indicates that there's a path v -> w and also a path w - v
+// and hence a cycle.
 bool dfs(const Graph& g, const int& v, std::unordered_set<int>& visited,
          std::unordered_set<int>& ancestors,
          std::unordered_map<int, int>& parent) {
@@ -25,10 +26,6 @@ bool dfs(const Graph& g, const int& v, std::unordered_set<int>& visited,
 
   for (const Edge& e : g.edges(v)) {
     const int& w = e.w;
-    if (parent[v] == w) {
-      continue;
-    }
-
     // find a tree edge, i.e. from parent to child.
     if (visited.count(w) == 0) {
       parent[w] = v;
@@ -86,46 +83,4 @@ bool dfs_detect_cycle(const Graph& g) {
   return false;
 }
 
-// union-find works as such: iterate all edges in the graph, if the
-// ingoing and outgoing vertices of an edge is already in the same connected
-// component, then there's a cycle. Otherwise, union the two vertices and
-// proceed to examine the next edge.
-// note, you have to identify the case that the outgoing vertex is parent
-// vertex, i.e. to not consider the bidirectional edges.
-// another solution is to remove duplicated edges at first. (recommended)
-bool uf_detect_cycle(const Graph& g) {
-  UF uf(g.all_vertices());
-  for (const Edge& e : dedup_edges(g.all_edges())) {
-    if (uf.is_connected(e.v, e.w)) {
-      return true;
-    }
-    uf.union_vertices(e.v, e.w);
-  }
-  return false;
-}
-
-
-#if TEST
-int main() {
-  Graph g({0, 1, 2});
-  g.add_edge({0, 1});
-  g.add_edge({1, 0});
-  g.add_edge({0, 2});
-  g.add_edge({2, 0});
-  g.add_edge({1, 2});
-  g.add_edge({2, 1});
-  assert(uf_detect_cycle(g));
-
-  g = Graph({0, 1, 2});
-  g.add_edge({0, 1});
-  g.add_edge({1, 0});
-  g.add_edge({0, 2});
-  g.add_edge({2, 0});
-  assert(!uf_detect_cycle(g));
-
-  g = Graph({0, 1});
-  g.add_edge({0, 1});
-  g.add_edge({1, 0});
-  assert(!uf_detect_cycle(g));
-}
-#endif
+#endif  // DIRECTED_CYCLE_DETECTION_HPP_

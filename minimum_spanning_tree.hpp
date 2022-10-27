@@ -22,10 +22,7 @@ Graph kruskal_min_span_tree(const Graph& g) {
   all_edges.sort(Edge::less);
 
   // helper union-find data structure to detect loops.
-  UF uf;
-  for (const int& v : g.all_vertices()) {
-    uf.add_vertex(v);
-  }
+  UF uf(g.all_vertices());
 
   Graph mst(g.all_vertices());
 
@@ -49,10 +46,7 @@ Graph kruskal_max_span_tree(const Graph& g) {
   all_edges.sort(Edge::greater());
 
   // helper union-find data structure to detect loops.
-  UF uf;
-  for (const int& v : g.all_vertices()) {
-    uf.add_vertex(v);
-  }
+  UF uf(g.all_vertices());
 
   Graph mst(g.all_vertices());
 
