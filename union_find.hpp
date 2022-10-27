@@ -2,6 +2,7 @@
 #define UNION_FIND_HPP_
 
 #include <cassert>
+#include <list>
 #include <unordered_map>
 
 // union-find implementation with path-compressiond and union by rank
