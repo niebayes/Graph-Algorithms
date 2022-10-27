@@ -61,8 +61,15 @@ std::list<Edge> dedup_edges(const std::list<Edge>& edges) {
 // note, for simplicity, there's no error handling.
 class Graph {
  public:
+  Graph() = default;
+  Graph(const std::list<int>& vertices) : vertices{vertices} {}
+
+  // although add_edge may add vertices by the way, some vertices in a graph may
+  // not have any connected edges, you have to call add_vertex to add each
+  // vertex.
   void add_vertex(const int& v) { maybe_add_vertex(v); }
 
+  // add a directed edge.
   void add_edge(const Edge& e) {
     adj_list[e.v].push_back(e);
     maybe_add_vertex(e.v);
@@ -78,13 +85,27 @@ class Graph {
     return adj_list.at(v);
   }
 
-  // return deduplicated edges.
+  // return all edges.
+  // if this is a directed graph, all directed edges are returned.
+  // if this is a undirected graph, all edges wherein the same edge is
+  // duplicated once are returned.
   std::list<Edge> all_edges() const {
     std::list<Edge> edges;
     for (const auto& p : adj_list) {
       edges.insert(edges.end(), p.second.cbegin(), p.second.cend());
     }
     return edges;
+  }
+
+  // create a graph with all directed egdes reversed.
+  Graph reversed() const {
+    Graph rg(vertices);
+    for (const int& v : vertices) {
+      for (const Edge& e : edges(v)) {
+        rg.add_edge(e.reversed());
+      }
+    }
+    return rg;
   }
 
   // print the graph using adjacency list representation.
