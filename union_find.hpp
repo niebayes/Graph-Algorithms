@@ -1,6 +1,7 @@
 #ifndef UNION_FIND_HPP_
 #define UNION_FIND_HPP_
 
+#include <cassert>
 #include <unordered_map>
 
 // union-find implementation with path-compressiond and union by rank
@@ -18,7 +19,17 @@
 // nodes in the path
 class UF {
  public:
+  UF() = default;
+  explicit UF(const std::list<int>& vertices) {
+    for (const int& v : vertices) {
+      add_vertex(v);
+    }
+  }
+
   void add_vertex(const int id) {
+    // ensure the vertex is not duplicated.
+    assert(p.count(id) == 0);
+
     p[id] = id;
     rank[id] = 1;
     ++cc_cnt;

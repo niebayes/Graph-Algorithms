@@ -21,6 +21,10 @@ struct Edge {
   int w;  // destination vertex id.
   int weight;
 
+  static Edge make(const int v, const int w, const int weight = 0) {
+    return Edge{.v = w, .w = v, .weight = weight};
+  }
+
   // construct an edge with the source and destination vertices reversed.
   Edge reversed() const { return Edge{.v = w, .w = v, .weight = weight}; }
 
@@ -62,7 +66,7 @@ std::list<Edge> dedup_edges(const std::list<Edge>& edges) {
 class Graph {
  public:
   Graph() = default;
-  Graph(const std::list<int>& vertices) : vertices{vertices} {}
+  explicit Graph(const std::list<int>& vertices) : vertices{vertices} {}
 
   // although add_edge may add vertices by the way, some vertices in a graph may
   // not have any connected edges, you have to call add_vertex to add each

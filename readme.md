@@ -7,6 +7,20 @@
 - DFS
 - BFS
 
+### Cycle Detection for Directed Graph
+- DFS to detect back edge
+- Union-Find to iterate all edges
+  - limits compared to DFS: cannot print the cycle
+  - but easier to implement
+
+### Cycle Detection for Undirected Graph
+- DFS to detect back edge 
+  - compared to DFS in directed graph: utilize the parent mapping
+- Union-Find to iterate all edges
+  - compared to Union-Find in directed graph: remove duplicated edges
+  - limits compared to DFS: cannot print the cycle
+  - but easier to implement
+
 ### Connected Components of Undirected Graph (CC)
 - DFS
 - Union-Find
@@ -18,17 +32,12 @@
 - DFS 
 - BFS (Kahn)
 
-### Cycle Detection for Directed Graph
-- DFS to detect back edge
-- Topogical Sorting
-- Tri-Coloring
-
-### Cycle Detection for Undirected Graph
-- DFS to detect back edge
-
 ### Minimum/Maximum Spanning Tree (MST)
 - Kruskal
 - Prim
+
+Applications: 
+- remove redundant edges from a graph to form a tree
 
 ### Single Source Shortest Path (SSSP)
 - BFS for unweighted graph
