@@ -1,7 +1,0 @@
-[
-{
-  "directory": "/Users/lzz/graph_algos/build",
-  "command": "/usr/bin/clang++   -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk -std=gnu++17 -o CMakeFiles/main.dir/main.cc.o -c /Users/lzz/graph_algos/main.cc",
-  "file": "/Users/lzz/graph_algos/main.cc"
-}
-]
