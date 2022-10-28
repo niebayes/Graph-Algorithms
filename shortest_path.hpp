@@ -1,3 +1,6 @@
+#ifndef SHORTEST_PATH_HPP_
+#define SHORTEST_PATH_HPP_
+
 #include <list>
 #include <queue>
 #include <stack>
@@ -337,3 +340,5 @@ bool floyd_warshall_apsp(const Graph& g) {
 
   return true;
 }
+
+#endif  // SHORTEST_PATH_HPP_
