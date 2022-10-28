@@ -39,10 +39,13 @@ Applications:
 - remove redundant edges from a graph to form a tree
 
 ### Single Source Shortest Path (SSSP)
-- BFS for unweighted graph
+- BFS for unweighted graph or graph with uniform-weighted edges
 - Dijkstra for non-negative weighted graph
 - Bellman-Ford for weighted graph
-- A* (A star) with Manhattan distance heuristics.
+
+### Source Sink Shortest Path (SSSP)
+almost identical to the single source shortest path problem, but with slight twist, i.e. terminate 
+the searching when reaching the sink, aka. the target, vertex.
 
 ### All Pairs Shortest Path (APSP)
 - Floyd-Warshall
