@@ -255,26 +255,31 @@ bool bellman_ford_sssp(const Graph& g, const int src, const int dst) {
 // since the path i -> .. -> k -> .. -> j may contain many middle vertices k, we
 // have to examine the shorter paths first. So this algo first computes the top
 // left portion of the matrix and then proceeds to the bottom right portion.
-void print_path(
-    const int v, const int w,
-    const std::unordered_map<int, std::unordered_map<int, int>>& last) {
-  // if v == w or v -> w, then.
-  const int k = last.at(v).at(w);
-  if (k == v) {
-    return;
+std::vector<int> get_path(
+    int v, const int w,
+    const std::unordered_map<int, std::unordered_map<int, int>>& next) {
+  if (next.at(v).at(w) == -1) {
+    return {};
   }
-  print_path(v, k, last);
-  std::cout << k << " -> ";
+  std::vector<int> path;
+  path.push_back(v);
+  while (v != w) {
+    v = next.at(v).at(w);
+    path.push_back(v);
+  }
+  return path;
 }
 
 void print_all_paths(
     const Graph& g,
-    const std::unordered_map<int, std::unordered_map<int, int>>& last) {
+    const std::unordered_map<int, std::unordered_map<int, int>>& next) {
   for (const int& v : g.all_vertices()) {
     for (const int& w : g.all_vertices()) {
-      std::cout << v << " -> ";
-      print_path(v, w, last);
-      std::cout << w << '\n';
+      const std::vector<int> path = get_path(v, w, next);
+      for (const int& x : path) {
+        std::cout << x << " -> ";
+      }
+      std::cout << '\n';
     }
   }
 }
@@ -282,9 +287,10 @@ void print_all_paths(
 bool floyd_warshall_apsp(const Graph& g) {
   // dist[i][j] = known smallest distance from i to j.
   std::unordered_map<int, std::unordered_map<int, int>> dist;
-  // last[i][j] = the last middle vertex k in the path i -> .. -> k -> j.
+  // FIXME: figure out the meaning of next[i][j].
+  // next[i][j] = the next middle vertex k in the path i -> .. -> k -> j.
   // if the path is simply i -> j, i.e. no middle vertices, then k = i.
-  std::unordered_map<int, std::unordered_map<int, int>> last;
+  std::unordered_map<int, std::unordered_map<int, int>> next;
 
   // do not use INT32_MAX to avoid integer overflow.
   constexpr int MAX_DIST = INT32_MAX / 2;
@@ -292,17 +298,18 @@ bool floyd_warshall_apsp(const Graph& g) {
   for (const int& v : g.all_vertices()) {
     for (const int& w : g.all_vertices()) {
       if (v == w) {
-        dist[v][w] = 0;
-        last[v][w] = v;
+        dist[v][v] = 0;
+        next[v][v] = w;
       } else {
         dist[v][w] = MAX_DIST;
+        next[v][w] = -1;
       }
     }
   }
 
   for (const Edge& e : g.all_edges()) {
     dist[e.v][e.w] = e.weight;
-    last[e.v][e.w] = e.v;
+    next[e.v][e.w] = e.w;
   }
 
   // iterate all middle vertices.
@@ -315,11 +322,11 @@ bool floyd_warshall_apsp(const Graph& g) {
         // with less distance from i to j, then use it.
         if (dist[i][j] > dist[i][k] + dist[k][j]) {
           dist[i][j] = dist[i][k] + dist[k][j];
-          // the last middle vertex in the path i -> .. -> k -> .. -> last -> j
-          // is the last middle vertex in the path k -> .. -> last -> j.
-          // by tracing back the last vertices in the path, we can reconstruct
+          // the next middle vertex in the path i -> .. -> k -> .. -> next -> j
+          // is the next middle vertex in the path k -> .. -> next -> j.
+          // by tracing back the next vertices in the path, we can reconstruct
           // the shortest path from i to j.
-          last[i][j] = last[k][j];
+          next[i][j] = next[i][k];
         }
 
         // FIXME: is this explanation correct?
@@ -336,7 +343,7 @@ bool floyd_warshall_apsp(const Graph& g) {
   }
 
   // print the shortest paths between each pair of vertices.
-  print_all_paths(g, last);
+  print_all_paths(g, next);
 
   return true;
 }
